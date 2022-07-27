@@ -9,28 +9,111 @@ import XCTest
 @testable import IOC
 
 class IOCTests: XCTestCase {
+    
+    var container: DependenciesContainer!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() {
+        container = DependenciesContainer()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    // MARK: - Basic registering and resolving
+    
+    func testThatHavingRegisteredADependency_WhenResolvingIt_ThenAnInstanceIsCreated() throws {
+        // Given
+        container.register(NetworkClient.self) { NetworkClientImpl() }
+        // When
+        let dependency = container.resolve(NetworkClient.self)
+        // Then
+        XCTAssertNotNil(dependency as? NetworkClientImpl)
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testThatHavingRegisteredADependency_WhenResolvingItMultipleTimes_ThenMultipleInstancesAreCreated() throws {
+        // Given
+        container.register(NetworkClient.self) { NetworkClientImpl() }
+        // When
+        let alpha = container.resolve(NetworkClient.self)
+        let beta = container.resolve(NetworkClient.self)
+        // Then
+        XCTAssertNotIdentical(alpha, beta)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    // MARK: - Singleton registering and resolving
+    
+    func testThatHavingRegisteredASingletonDependency_WhenResolvingIt_ThenAnInstanceIsCreated() throws {
+        // Given
+        container.registerAsSingleton(NetworkClient.self) { NetworkClientImpl() }
+        // When
+        let dependency = container.resolve(NetworkClient.self)
+        // Then
+        XCTAssertNotNil(dependency as? NetworkClientImpl)
+    }
+    
+    func testThatHavingRegisteredASingletonDependency_WhenResolvingItMultipleTimes_ThenSameInstanceIsReturned() throws {
+        // Given
+        container.registerAsSingleton(NetworkClient.self) { NetworkClientImpl() }
+        // When
+        let alpha = container.resolve(NetworkClient.self)
+        let beta = container.resolve(NetworkClient.self)
+        // Then
+        XCTAssertIdentical(alpha, beta)
+    }
+    
+    // MARK: - Circular dependencies resolution
+    
+    func testThatHavingRegisteredMultipleCircularDependencies_WhenResolvingAndUsingThem_ThenResolversWorks() throws {
+        // Given
+        container.registerAsSingleton(BlueService.self) {
+            BlueServiceImpl(redServiceResolver: { self.container.resolve(RedService.self) })
         }
+        container.registerAsSingleton(RedService.self) {
+            RedServiceImpl(blueServiceResolver: { self.container.resolve(BlueService.self) })
+        }
+        // When
+        let redService = container.resolve(RedService.self)
+        let blueService = container.resolve(BlueService.self)
+        // Then
+        XCTAssertEqual(redService.info, "This service name is Ronny. Other service name is Bronco.")
+        XCTAssertEqual(blueService.info, "This service name is Bronco. Other service name is Ronny.")
     }
 
+}
+
+// MARK: - Generic mocks
+
+protocol NetworkClient: AnyObject {
+    func get(endpoint: String)
+}
+
+class NetworkClientImpl: NetworkClient {
+    func get(endpoint: String) {}
+}
+
+// MARK: - Circular dependencies mocks
+
+protocol BlueService {
+    var name: String { get }
+    var info: String { get }
+}
+
+protocol RedService {
+    var name: String { get }
+    var info: String { get }
+}
+
+class BlueServiceImpl: BlueService {
+    let name = "Bronco"
+    let redServiceResolver: () -> RedService
+    init(redServiceResolver: @escaping () -> RedService) {
+        self.redServiceResolver = redServiceResolver
+    }
+    var info: String { "This service name is \(name). Other service name is \(redServiceResolver().name)." }
+}
+
+class RedServiceImpl: RedService {
+    let name = "Ronny"
+    let blueServiceResolver: () -> BlueService
+    init(blueServiceResolver: @escaping () -> BlueService) {
+        self.blueServiceResolver = blueServiceResolver
+    }
+    var info: String { "This service name is \(name). Other service name is \(blueServiceResolver().name)." }
 }

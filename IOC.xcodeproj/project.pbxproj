@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CAE2D8D428913EFC00E39D01 /* IOC.docc in Sources */ = {isa = PBXBuildFile; fileRef = CAE2D8D328913EFC00E39D01 /* IOC.docc */; };
 		CAE2D8DA28913EFC00E39D01 /* IOC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAE2D8CF28913EFC00E39D01 /* IOC.framework */; };
 		CAE2D8DF28913EFC00E39D01 /* IOCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE2D8DE28913EFC00E39D01 /* IOCTests.swift */; };
 		CAE2D8E028913EFC00E39D01 /* IOC.h in Headers */ = {isa = PBXBuildFile; fileRef = CAE2D8D228913EFC00E39D01 /* IOC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CAE2D8EA28913F2500E39D01 /* DependenciesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE2D8E928913F2500E39D01 /* DependenciesContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,9 +26,9 @@
 /* Begin PBXFileReference section */
 		CAE2D8CF28913EFC00E39D01 /* IOC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IOC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAE2D8D228913EFC00E39D01 /* IOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOC.h; sourceTree = "<group>"; };
-		CAE2D8D328913EFC00E39D01 /* IOC.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = IOC.docc; sourceTree = "<group>"; };
 		CAE2D8D928913EFC00E39D01 /* IOCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAE2D8DE28913EFC00E39D01 /* IOCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOCTests.swift; sourceTree = "<group>"; };
+		CAE2D8E928913F2500E39D01 /* DependenciesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				CAE2D8D228913EFC00E39D01 /* IOC.h */,
-				CAE2D8D328913EFC00E39D01 /* IOC.docc */,
+				CAE2D8E928913F2500E39D01 /* DependenciesContainer.swift */,
 			);
 			path = IOC;
 			sourceTree = "<group>";
@@ -147,6 +147,7 @@
 				TargetAttributes = {
 					CAE2D8CE28913EFC00E39D01 = {
 						CreatedOnToolsVersion = 13.4;
+						LastSwiftMigration = 1340;
 					};
 					CAE2D8D828913EFC00E39D01 = {
 						CreatedOnToolsVersion = 13.4;
@@ -194,7 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CAE2D8D428913EFC00E39D01 /* IOC.docc in Sources */,
+				CAE2D8EA28913F2500E39D01 /* DependenciesContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +341,7 @@
 		CAE2D8E428913EFC00E39D01 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -359,6 +361,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -367,6 +370,7 @@
 		CAE2D8E528913EFC00E39D01 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -394,6 +398,7 @@
 		CAE2D8E728913EFC00E39D01 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -409,6 +414,7 @@
 		CAE2D8E828913EFC00E39D01 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
